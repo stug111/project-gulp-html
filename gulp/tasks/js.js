@@ -1,5 +1,4 @@
 const { src, dest, series, watch } = require("gulp");
-const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 const plumber = require("gulp-plumber");
 const { notify } = require("../utils");
@@ -22,16 +21,22 @@ const webpackOpts = {
             presets: ["@babel/preset-env"]
           }
         }
+      },
+      {
+        test: require.resolve("jquery"),
+        use: [
+          {
+            loader: "expose-loader",
+            options: "jQuery"
+          },
+          {
+            loader: "expose-loader",
+            options: "$"
+          }
+        ]
       }
     ]
   },
-  plugins: [
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-      "window.jQuery": "jquery"
-    })
-  ],
   watch: false
 };
 
